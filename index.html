@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hanjla Harry Content Generator</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Alegreya:wght@700;800&family=Alegreya+Sans+SC:wght@400;500;700&family=Amaranth:wght@400;700&family=Boogaloo&family=Khand:wght@300;400;500;600;700&family=Rozha+One&family=Teko:wght@400;600;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Open+Sans:wght@300;400;500;700&family=Lato:wght@300;400;700&family=Merriweather:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap');
+    
+    body {
+      font-family: 'Inter', sans-serif; /* Default, will be overridden by theme */
+      transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out, font-family 0.3s ease-in-out;
+    }
+
+    /* Dark mode styles */
+    .dark .card-container { background-color: #1f2937; /* bg-gray-800 */ }
+    .card-container { background-color: #ffffff; }
+    .dark .card-container .bg-gray-50 { background-color: #374151; /* bg-gray-700 */ }
+
+    .dark input[type="text"],
+    .dark input[type="password"],
+    .dark input[type="number"],
+    .dark input[type="color"],
+    .dark input[type="date"],
+    .dark input[type="time"],
+    .dark select,
+    .dark textarea {
+      background-color: #374151; /* bg-gray-700 */
+      color: #d1d5db; /* text-gray-300 */
+      border-color: #4b5563; /* border-gray-600 */
+    }
+    .dark input::placeholder,
+    .dark textarea::placeholder {
+      color: #9ca3af; /* placeholder-gray-400 */
+    }
+    .dark select option {
+        background-color: #374151;
+        color: #d1d5db;
+    }
+
+    /* Custom WebKit scrollbar styles (can be overridden by Tailwind utilities if plugin is used) */
+    /* For Webkit browsers */
+    .scrollbar-thin::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+    }
+    .scrollbar-thin::-webkit-scrollbar-track {
+        @apply bg-gray-100 dark:bg-gray-800 rounded-lg;
+    }
+    .scrollbar-thin::-webkit-scrollbar-thumb {
+        @apply bg-gray-400 dark:bg-gray-600 rounded-lg;
+    }
+    .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+        @apply bg-gray-500 dark:bg-gray-500;
+    }
+
+    /* For Firefox (partial support, requires enabling in about:config) */
+    .scrollbar-thin {
+        scrollbar-width: thin;
+        scrollbar-color: theme('colors.gray.400') theme('colors.gray.100'); /* thumb track */
+    }
+    .dark .scrollbar-thin {
+         scrollbar-color: theme('colors.gray.600') theme('colors.gray.800'); /* thumb track */
+    }
+
+    /* CSS Variables for theming */
+    :root {
+      --app-primary-color: #009dff; /* New default blue */
+      --app-primary-color-hover: #007ecc; /* Darker blue for hover */
+      --app-primary-color-text: #ffffff; /* White text for contrast */
+      --app-font-family: 'Inter', sans-serif;
+    }
+    body, #root {
+        font-family: var(--app-font-family);
+        background: var(--app-bg, #F3F4F6); /* Default light gray */
+        color: var(--app-text-color, #1F2937); /* Default dark gray */
+    }
+    .dark body, .dark #root {
+        --app-bg: #111827; /* Dark mode bg */
+        --app-text-color: #F9FAFB; /* Dark mode text */
+    }
+    .text-primary { color: var(--app-primary-color); }
+    .bg-primary { background-color: var(--app-primary-color); }
+    .text-primary-text { color: var(--app-primary-color-text); }
+    .hover\:bg-primary-hover:hover { background-color: var(--app-primary-color-hover); }
+    .focus\:ring-primary:focus {
+        --tw-ring-color: var(--app-primary-color);
+    }
+    .rounded.text-primary {
+        color: var(--app-primary-color);
+    }
+     .border-primary { border-color: var(--app-primary-color); }
+
+    /* For toast notifications */
+    .toast-in {
+      animation: slide-in-right 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+    }
+    .toast-out {
+      animation: slide-out-right 0.5s cubic-bezier(0.550, 0.085, 0.680, 0.530) both;
+    }
+    @keyframes slide-in-right {
+      0% { transform: translateX(100px); opacity: 0; }
+      100% { transform: translateX(0); opacity: 1; }
+    }
+    @keyframes slide-out-right {
+      0% { transform: translateX(0); opacity: 1; }
+      100% { transform: translateX(100px); opacity: 0; }
+    }
+
+    @keyframes ring {
+      0%, 100% { transform: rotate(0); }
+      10%, 30%, 50%, 70%, 90% { transform: rotate(-10deg); }
+      20%, 40%, 60%, 80% { transform: rotate(10deg); }
+    }
+    .animate-ring {
+      animation: ring 1s ease-in-out;
+    }
+    
+    @keyframes unfurl {
+      0% {
+        transform: scaleY(0) scaleX(0);
+        opacity: 0;
+      }
+      100% {
+        transform: scaleY(1) scaleX(1);
+        opacity: 1;
+      }
+    }
+    
+    @keyframes fade-in {
+        0% { opacity: 0; }
+        100% { opacity: 1; }
+    }
+    
+    /* Water Drop Loader Animation */
+    @keyframes water-drop-pulse {
+      0%, 100% {
+        transform: scale(0.5);
+        opacity: 0.5;
+      }
+      50% {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    /* Welcome Text Animation */
+    @keyframes text-glow {
+      0%, 100% {
+        text-shadow: 0 0 10px rgba(59, 130, 246, 0.5), 0 0 20px rgba(59, 130, 246, 0.3);
+      }
+      50% {
+        text-shadow: 0 0 20px rgba(59, 130, 246, 0.8), 0 0 30px rgba(59, 130, 246, 0.5);
+      }
+    }
+
+    .animation-delay-200 { animation-delay: 200ms; }
+    .animation-delay-400 { animation-delay: 400ms; }
+
+  </style>
+<script type="importmap">
+{
+  "imports": {
+    "react-router-dom": "https://aistudiocdn.com/react-router-dom@^7.9.1",
+    "react/": "https://aistudiocdn.com/react@^19.1.1/",
+    "react": "https://aistudiocdn.com/react@^19.1.1",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.1.1/",
+    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.20.0",
+    "puppeteer": "https://aistudiocdn.com/puppeteer@^24.22.0",
+    "html2canvas": "https://aistudiocdn.com/html2canvas@^1.4.1",
+    "cors": "https://aistudiocdn.com/cors@^2.8.5",
+    "jszip": "https://aistudiocdn.com/jszip@^3.10.1",
+    "express": "https://aistudiocdn.com/express@^5.1.0",
+    "face-api.js": "https://aistudiocdn.com/face-api.js@^0.22.2",
+    "puppeteer-extra": "https://aistudiocdn.com/puppeteer-extra@^3.3.6",
+    "puppeteer-extra-plugin-stealth": "https://aistudiocdn.com/puppeteer-extra-plugin-stealth@^2.11.2",
+    "totp-generator": "https://aistudiocdn.com/totp-generator@^2.0.0"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+<body class="bg-gray-100 dark:bg-gray-900">
+  <div id="root"></div>
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-storage.js"></script>
+  <script type="module" src="./index.tsx"></script>
+<script type="module" src="/index.tsx"></script>
+</body>
+</html>
